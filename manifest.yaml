@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-api
+  namespace: default
+  labels:
+    app: node-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: node-api
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: node-api
+    spec:
+      containers:
+      - image: gcr.io/steam-glass-352620/node-api:v1
+        name: node-api
+        imagePullPolicy: Always
+        resources: {}
+        ports:
+          - containerPort: 8181
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-api
+  labels:
+    run: node-api
+spec:
+  ports:
+  - port: 8181
+    protocol: TCP
+  selector:
+    app: node-api
+  type: LoadBalancer
